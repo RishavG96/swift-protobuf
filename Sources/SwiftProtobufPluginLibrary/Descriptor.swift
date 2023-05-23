@@ -649,7 +649,7 @@ public final class FieldDescriptor {
     // default:
     //   return file.syntax == .proto2 || oneofIndex != nil
     return false
-    }
+    // }
   }
 
   /// Returns true if this is a string field and should do UTF-8 validation.
