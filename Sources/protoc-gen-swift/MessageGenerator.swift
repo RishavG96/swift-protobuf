@@ -294,9 +294,6 @@ class MessageGenerator {
             let normalizedExtensionRanges = descriptor.normalizedExtensionRanges
             if !fields.isEmpty || normalizedExtensionRanges.count > 3 {
               p.print("""
-                  // The use of inline closures is to circumvent an issue where the compiler
-                  // allocates stack space for every case branch when no optimizations are
-                  // enabled. https://github.com/apple/swift-protobuf/issues/1034
                   switch fieldNumber {
                   """)
               for f in fieldsSortedByNumber {
@@ -340,14 +337,6 @@ class MessageGenerator {
           descriptor.useMessageSetWireFormat ? "visitExtensionFieldsAsMessageSet" : "visitExtensionFields"
 
         let usesLocals = fields.reduce(false) { $0 || $1.generateTraverseUsesLocals }
-        if usesLocals {
-          p.print("""
-            // The use of inline closures is to circumvent an issue where the compiler
-            // allocates stack space for every if/case branch local when no optimizations
-            // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
-            // https://github.com/apple/swift-protobuf/issues/1182
-            """)
-        }
 
         // Use the "ambitious" ranges because for visit because subranges with no
         // intermixed fields can be merged to reduce the number of calls for
