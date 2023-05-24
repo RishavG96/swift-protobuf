@@ -641,15 +641,15 @@ public final class FieldDescriptor {
   /// repeated fields, and singular proto3 fields without "optional".
   public var hasPresence: Bool {
     // This logic comes from the C++ FieldDescriptor::has_presence() impl.
-    // guard label != .repeated else { return false }
-    // switch type {
-    // case .group, .message:
-    //   // Groups/messages always get field presence.
-    //   return true
-    // default:
-    //   return file.syntax == .proto2 || oneofIndex != nil
-    return false
-    // }
+    guard label != .repeated else { return false }
+    switch type {
+    case .group, .message:
+      // Groups/messages always get field presence.
+      return true
+    default:
+      return file.syntax == .proto2 || oneofIndex != nil
+    //return false
+    }
   }
 
   /// Returns true if this is a string field and should do UTF-8 validation.
